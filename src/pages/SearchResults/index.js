@@ -4,6 +4,7 @@ import ListOfGifs from "components/ListOfGifs";
 import { useGifs } from "hooks/useGifs";
 import useNearScreen from "hooks/useNearScreen";
 import debounce from "just-debounce-it";
+import { Helmet } from "react-helmet";
 
 export default function SearchResults({ params }) {
   const { keyword } = params;
@@ -13,6 +14,9 @@ export default function SearchResults({ params }) {
     externalRef: loading ? null : externalRef,
     once: false,
   });
+
+  const title = gifs ? `${gifs.length} resultados de ${keyword}` : loading ? 'Cargando...' : ''
+ 
 
   //const handleNextPage = () => setPage((prevPage) => prevPage + 1);
 
@@ -36,9 +40,16 @@ export default function SearchResults({ params }) {
         <Spinner />
       ) : (
         <>
-          <h3 className="App-title">{decodeURI(keyword)}</h3>
-          <ListOfGifs gifs={gifs} />
-          <div id="visor" ref={externalRef}></div>
+          <Helmet>
+            <title>{title}</title>
+            <meta name="description" content={title} />
+            <meta name="rating" content="General" />
+          </Helmet>
+          <div className="App-wrapper">
+            <h3 className="App-title">{decodeURI(keyword)}</h3>
+            <ListOfGifs gifs={gifs} />
+            <div id="visor" ref={externalRef}></div>
+          </div>
         </>
       )}
     </>
