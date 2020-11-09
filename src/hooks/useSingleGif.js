@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import {useGifs} from 'hooks/useGifs'
-import getSimpleGif from 'services/getSimpleGif'
+import getSingleGif from 'services/getSingleGif'
 
-export default function useSimpleGif ({id}) {
+export default function useSingleGif ({id}) {
     const {gifs} = useGifs()
     const gifFromCache = gifs.find(singleGif => singleGif.id === id)
 
@@ -14,10 +14,11 @@ export default function useSimpleGif ({id}) {
         if(!gif) {
             setIsLoading(true)
             // llamar al servicio si no tenemos gif
-            getSimpleGif({id})
+            getSingleGif({id})
                 .then(gif => {
                     setGif(gif)
                     setIsLoading(false)
+                    setIsError(false)
                 }).catch(err => {
                     setIsLoading(false)
                     setIsError(true)
@@ -25,5 +26,5 @@ export default function useSimpleGif ({id}) {
         }
     }, [gif, id])
 
-    return {gif}
+    return {gif, isLoading, isError}
 }

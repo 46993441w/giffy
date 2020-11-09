@@ -4,28 +4,38 @@ import {useGifs} from '../../hooks/useGifs'
 import ListOfGifs from "../../components/ListOfGifs";
 import TrendingSearches from "../../components/TrendingSearches";
 import SearchForm from "components/SearchForm";
-
-const POPULAR_GIFS = ["Matrix", "Panda", "Morty"];
+import { Helmet } from "react-helmet";
 
 export default function Home() {
-  const [path, pushLocation] = useLocation();
-  const {loading, gifs} = useGifs()
+  const [_, pushLocation] = useLocation();
+  const {gifs} = useGifs()
 
-  const handleSubmit = useCallback(({keyword}) => {
+  /*const handleSubmit = useCallback(({keyword}) => {
     //navegar a otra ruta
     pushLocation(`/search/${keyword}`);
-  }, [pushLocation]);
+  }, [pushLocation]);*/
+  const handleSubmitSearchForm = ({keyword}) => {
+    //navegar a otra ruta
+    pushLocation(`/search/${keyword}`);
+  };
 
   return (
     <>
-      <SearchForm onSubmit={handleSubmit} />
-      <div className="App-main">
-        <div className="App-results">
-          <h3 className="App-title">Última búsqueda</h3>
-          <ListOfGifs gifs={gifs} />
-        </div>
-        <div className="App-category">
-          <TrendingSearches />
+      <Helmet>
+        <title>Home || Giffy</title>
+      </Helmet>
+      <header className="o-header">
+        <SearchForm onSubmit={handleSubmitSearchForm} />
+      </header>
+      <div className="App-wrapper">
+        <div className="App-main">
+          <div className="App-results">
+            <h3 className="App-title">Última búsqueda</h3>
+            <ListOfGifs gifs={gifs} />
+          </div>
+          <div className="App-category">
+            <TrendingSearches />
+          </div>
         </div>
       </div>
     </>
